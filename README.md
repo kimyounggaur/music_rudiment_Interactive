@@ -5,7 +5,7 @@
 ## 구성
 - `dist/oseon-book.html` — 표지 + 2쪽(오선, 덧줄, 덧간)을 이전/다음 버튼으로 넘기는 모바일 교과서
 - `dist/oseon-001-mobile-guitar.html` — 2쪽 단독 (기타 아이콘 팔레트 스킨, 다크/화이트 버튼)
-- `dist/oseon-001-mobile.html` — 2쪽 단독 (볾라 파스텔 스킨)
+- `dist/oseon-001-mobile.html` — 2쪽 단독 (\ubcf4\ub77c 파스텔 스킨)
 - `src/` — 소스: `engine.js`(오선 자리 엔진, `node test-engine.js`로 검증), `glyphs.json`(Bravura 글리프, SIL OFL), `page.*.template.html`, 점검 스크립트
 - `web3d/` — Three.js 오선 3D 학습 앱: 음표 드래그, 합성 소리, 덧줄 상태, 세 번의 자리 찾기 연습, 반응형 UI
 
