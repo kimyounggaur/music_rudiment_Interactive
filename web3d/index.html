@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang='ko'>
+<head>
+  <meta charset='utf-8'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <meta name='theme-color' content='#efedf7'>
+  <link rel='icon' href='./assets/favicon.svg' type='image/svg+xml'>
+  <link rel='preconnect' href='https://fonts.googleapis.com'>
+  <link rel='preconnect' href='https://fonts.gstatic.com' crossorigin>
+  <link href='https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Jua&display=swap' rel='stylesheet'>
+  <title>오선의 정원 — 3D 음악이론</title>
+  <style>
+    :root{
+      --p-lavender-50:oklch(0.965 0.018 295);--p-lavender-100:oklch(0.925 0.035 295);
+      --p-lavender-300:oklch(0.79 0.07 295);--p-slate-500:oklch(0.53 0.075 270);
+      --p-slate-700:oklch(0.37 0.055 270);--p-slate-900:oklch(0.25 0.04 270);
+      --p-pink-100:oklch(0.91 0.055 350);--p-pink-500:oklch(0.66 0.19 350);
+      --p-pink-700:oklch(0.49 0.16 350);--p-butter-100:oklch(0.96 0.065 100);
+      --p-butter-400:oklch(0.87 0.16 100);--p-paper:oklch(0.995 0.005 90);
+      --bg:var(--p-lavender-50);--surface:var(--p-paper);--ink:var(--p-slate-900);
+      --muted:var(--p-slate-500);--line:var(--p-lavender-100);--accent:var(--p-slate-500);
+      --accent-ink:var(--p-paper);--outside:var(--p-pink-500);--focus:var(--p-pink-700);
+      --font-display:Jua,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+      --font-body:'Gowun Dodum','Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+    }
+    *,*::before,*::after{box-sizing:border-box}
+    [hidden]{display:none!important}
+    html,body{margin:0;min-height:100%;background:var(--bg);color:var(--ink)}
+    body{font-family:var(--font-body);font-size:16px;line-height:1.6;word-break:keep-all;-webkit-font-smoothing:antialiased}
+    button{font:inherit;color:inherit;-webkit-tap-highlight-color:transparent}
+    button:focus-visible,.stage:focus-visible{outline:3px solid var(--focus);outline-offset:4px}
+    button{cursor:pointer}
+    button:disabled{cursor:not-allowed;opacity:.4}
+    .sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    .icon{width:21px;height:21px;display:block;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+    .app{min-height:100dvh;display:flex;flex-direction:column}
+    .header{height:84px;flex:none;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:16px 32px;max-width:1600px;width:100%;margin:0 auto}
+    .brand{display:flex;align-items:center;gap:12px;min-width:0}
+    .brand-mark{width:46px;height:46px;border-radius:15px;background:var(--ink);color:var(--surface);display:grid;place-items:center;box-shadow:0 4px 0 var(--p-lavender-300)}
+    .brand-mark .icon{width:26px;height:26px}
+    .brand-title{margin:0;font:400 22px/1.15 var(--font-display);letter-spacing:-.02em}
+    .brand-sub{margin:3px 0 0;font:600 10px/1.2 var(--font-body);letter-spacing:.14em;color:var(--muted)}
+    .header-actions{display:flex;gap:10px}
+    .icon-button{appearance:none;width:46px;height:46px;border:1px solid var(--line);border-radius:15px;background:var(--surface);display:grid;place-items:center;box-shadow:0 3px 0 var(--line);transition:transform .12s ease-out,box-shadow .12s ease-out,background .12s ease-out}
+    .icon-button:hover{background:var(--p-lavender-100)}
+    .icon-button:active{transform:translateY(2px);box-shadow:0 1px 0 var(--line)}
+    .icon-button[aria-pressed='false']{color:var(--muted);background:var(--line)}
+    .main{flex:1;min-height:0;width:100%;max-width:1600px;margin:0 auto;padding:0 32px 28px;display:grid;grid-template-columns:minmax(0,1fr) 370px;gap:32px}
+    .stage{position:relative;min-width:0;min-height:520px;border:1px solid var(--line);border-radius:32px;overflow:hidden;background:var(--p-lavender-50);box-shadow:0 8px 0 var(--line);isolation:isolate;touch-action:none}
+    .canvas-mount,.canvas-mount canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+    .canvas-mount canvas{touch-action:none;outline:none}
+    .scene-top{position:absolute;z-index:4;top:22px;left:24px;right:24px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;pointer-events:none}
+    .lesson-tag,.view-tag{display:inline-flex;align-items:center;min-height:32px;padding:6px 12px;border-radius:999px;background:color-mix(in oklch,var(--surface) 90%,transparent);border:1px solid color-mix(in oklch,var(--line) 75%,transparent);font:400 12px/1.2 var(--font-display);color:var(--muted);backdrop-filter:blur(8px)}
+    .lesson-tag{color:var(--ink)}
+    .scene-bottom{position:absolute;z-index:4;left:24px;right:24px;bottom:20px;display:flex;justify-content:space-between;align-items:flex-end;gap:12px;pointer-events:none}
+    .drag-hint{margin:0;display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:14px;background:color-mix(in oklch,var(--surface) 90%,transparent);font-size:12px;color:var(--muted);backdrop-filter:blur(8px)}
+    .drag-hint .icon{width:17px;height:17px}
+    .color-key{display:flex;gap:6px}
+    .key-dot{width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px color-mix(in oklch,var(--accent) 16%,transparent)}
+    .key-dot.out{background:var(--outside);box-shadow:0 0 0 4px color-mix(in oklch,var(--outside) 16%,transparent)}
+    .label-layer{position:absolute;inset:0;z-index:3;pointer-events:none;overflow:hidden}
+    .pitch-label{position:absolute;left:0;top:0;white-space:nowrap;padding:4px 9px;border-radius:999px;background:color-mix(in oklch,var(--surface) 88%,transparent);border:1px solid color-mix(in oklch,var(--line) 80%,transparent);color:var(--muted);font:400 11px/1.2 var(--font-display);opacity:.72;will-change:transform;transition:color .18s,background .18s,opacity .18s}
+    .pitch-label.active{opacity:1;background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+    .pitch-label.out.active{background:var(--outside);border-color:var(--outside)}
+    .zone-label{position:absolute;left:50%;transform:translateX(-50%);z-index:3;pointer-events:none;padding:5px 11px;border-radius:999px;background:var(--p-pink-100);color:var(--p-pink-700);font:400 11px/1.2 var(--font-display)}
+    .zone-label.top{top:68px}.zone-label.bottom{bottom:64px}
+    .toast{position:absolute;z-index:6;left:50%;bottom:70px;max-width:calc(100% - 32px);transform:translate(-50%,8px) scale(.96);padding:10px 16px;border-radius:16px;background:var(--ink);color:var(--surface);font:400 14px/1.4 var(--font-display);text-align:center;opacity:0;pointer-events:none;transition:opacity .18s,transform .22s ease-out}
+    .toast.show{opacity:1;transform:translate(-50%,0) scale(1)}
+    .poster{position:absolute;inset:0;z-index:5;display:grid;place-items:center;background:var(--p-lavender-50);transition:opacity .3s,visibility .3s}
+    .poster.is-hidden{opacity:0;visibility:hidden;pointer-events:none}
+    .poster-art{width:min(72%,560px);transform:rotateX(7deg) rotateY(-9deg)}
+    .poster-lines{display:flex;flex-direction:column;gap:26px;padding:54px 0;position:relative}
+    .poster-lines i{height:5px;border-radius:99px;background:var(--p-slate-700);box-shadow:0 5px 0 color-mix(in oklch,var(--accent) 10%,transparent)}
+    .poster-note{position:absolute;right:27%;top:42%;width:64px;height:46px;border-radius:50%;background:var(--accent);transform:rotate(-15deg);box-shadow:0 10px 25px color-mix(in oklch,var(--accent) 24%,transparent)}
+    .poster-note::after{content:'';position:absolute;right:3px;bottom:28px;width:6px;height:92px;border-radius:99px;background:var(--accent)}
+    .fallback{position:absolute;z-index:7;inset:auto 20px 20px;padding:14px;border-radius:16px;background:var(--surface);color:var(--p-pink-700);font-size:14px;text-align:center}
+    .sidebar{min-width:0;min-height:0;overflow-y:auto;padding:8px 2px 8px 0;display:flex;flex-direction:column;gap:20px;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
+    .lesson-kicker{margin:0 0 6px;font:400 12px/1.3 var(--font-display);color:var(--p-pink-700);letter-spacing:.04em}
+    h1{margin:0;font:400 38px/1.16 var(--font-display);letter-spacing:-.035em}
+    .intro-copy{margin:10px 0 0;color:var(--muted);font-size:15px;line-height:1.65}
+    .current{padding:18px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:center}
+    .current-label{margin:0 0 2px;font-size:12px;color:var(--muted)}
+    .note-name{margin:0;font:400 34px/1.2 var(--font-display);color:var(--p-slate-700);transition:color .18s}
+    .note-name.out{color:var(--p-pink-700)}
+    .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+    .chip{display:inline-flex;align-items:center;min-height:25px;padding:4px 9px;border-radius:999px;background:var(--line);color:var(--p-slate-700);font:400 11px/1.2 var(--font-display)}
+    .chip.out{background:var(--p-pink-100);color:var(--p-pink-700)}
+    .solfa-badge{width:76px;height:76px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--badge,var(--p-lavender-300));box-shadow:0 5px 0 color-mix(in oklch,var(--badge,var(--p-lavender-300)) 72%,var(--ink));color:var(--ink);transition:background .2s}
+    .solfa{font:400 30px/1 var(--font-display)}
+    .letter{margin-top:5px;font:700 11px/1 var(--font-body);letter-spacing:.08em}
+    .explanation{margin:0;font-size:15px;line-height:1.7;color:var(--ink);min-height:51px}
+    .controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+    .control{appearance:none;min-height:70px;border:1px solid var(--line);border-radius:19px;background:var(--surface);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;box-shadow:0 4px 0 var(--line);font:400 12px/1.2 var(--font-display);transition:transform .1s,box-shadow .1s,background .12s}
+    .control:hover:not(:disabled){background:var(--p-lavender-100)}
+    .control:active:not(:disabled){transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+    .control.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);box-shadow:0 4px 0 var(--p-slate-700)}
+    .control.primary:hover:not(:disabled){background:var(--p-slate-700)}
+    .practice{padding:18px;border-radius:24px;background:var(--p-butter-100);border:1px solid color-mix(in oklch,var(--p-butter-400) 38%,var(--p-butter-100))}
+    .practice-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .practice-title{margin:0;font:400 18px/1.25 var(--font-display)}
+    .practice-count{font:700 11px/1 var(--font-body);color:var(--muted)}
+    .practice-copy{margin:8px 0 14px;font-size:13px;line-height:1.6;color:var(--p-slate-700);min-height:42px}
+    .practice-target{color:var(--p-pink-700);font-weight:700}
+    .practice-button{appearance:none;width:100%;min-height:46px;border:0;border-radius:15px;background:var(--ink);color:var(--surface);box-shadow:0 4px 0 var(--p-slate-500);font:400 14px/1 var(--font-display);transition:transform .1s,box-shadow .1s}
+    .practice-button:hover{background:var(--p-slate-700)}
+    .practice-button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--p-slate-500)}
+    .progress{display:flex;gap:5px;margin-top:12px}
+    .progress i{height:5px;flex:1;border-radius:99px;background:color-mix(in oklch,var(--p-butter-400) 45%,var(--surface))}
+    .progress i.done{background:var(--p-pink-500)}
+    .legend{margin:auto 0 0;display:flex;gap:16px;flex-wrap:wrap;color:var(--muted);font-size:12px}
+    .legend span{display:flex;align-items:center;gap:7px}
+    .legend i{width:9px;height:9px;border-radius:50%;background:var(--accent)}
+    .legend i.out{background:var(--outside)}
+    @media(max-width:1100px){.main{grid-template-columns:minmax(0,1fr) 330px;gap:24px;padding-inline:24px}.header{padding-inline:24px}h1{font-size:34px}.view-tag{display:none}}
+    @media(max-width:860px){
+      .app{min-height:100dvh}.header{height:74px;padding:12px 16px}.brand-mark{width:42px;height:42px}.brand-title{font-size:20px}.brand-sub{font-size:9px}
+      .main{display:flex;flex-direction:column;gap:26px;padding:0 16px 28px;overflow:visible}.stage{flex:none;height:53dvh;min-height:390px;max-height:570px;border-radius:26px}
+      .sidebar{overflow:visible;padding:0 2px;gap:18px}.lesson-intro{max-width:620px}.intro-copy{max-width:580px}.current{padding:16px 0}.legend{margin-top:4px}.scene-top{left:18px;right:18px;top:18px}.scene-bottom{left:18px;right:18px;bottom:16px}.zone-label.top{top:60px}.zone-label.bottom{bottom:58px}
+    }
+    @media(max-width:480px){.brand-sub{display:none}.header-actions{gap:8px}.icon-button{width:44px;height:44px;border-radius:14px}.stage{height:49dvh;min-height:360px}.lesson-tag{font-size:12px;padding:5px 10px}.pitch-label{font-size:12px;padding:3px 6px}.drag-hint{font-size:12px;padding:7px 9px}.color-key{display:none}h1{font-size:31px}.note-name{font-size:30px}.solfa-badge{width:68px;height:68px}.letter{font-size:12px}.chip{font-size:12px}.practice-count{font-size:12px}.control{min-height:66px}.practice{padding:16px}.zone-label{font-size:12px}}
+    @media(max-height:740px) and (min-width:861px){.header{height:72px}.main{padding-bottom:20px}.stage{min-height:440px}.sidebar{gap:13px}h1{font-size:32px}.intro-copy{margin-top:6px}.current{padding:12px 0}.practice{padding:14px}.practice-copy{margin-bottom:10px}.control{min-height:62px}}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}}
+  </style>
+</head>
+<body>
+  <svg width='0' height='0' style='position:absolute' aria-hidden='true'>
+    <symbol id='i-music' viewBox='0 0 24 24'><path d='M9 18V5l11-2v13M9 8l11-2'/><circle cx='6' cy='18' r='3'/><circle cx='17' cy='16' r='3'/></symbol>
+    <symbol id='i-volume' viewBox='0 0 24 24'><path d='M11 5 6 9H3v6h3l5 4V5Z'/><path d='M15 9a4 4 0 0 1 0 6M18 6a8 8 0 0 1 0 12'/></symbol>
+    <symbol id='i-muted' viewBox='0 0 24 24'><path d='M11 5 6 9H3v6h3l5 4V5Z'/><path d='m16 10 5 5m0-5-5 5'/></symbol>
+    <symbol id='i-reset' viewBox='0 0 24 24'><path d='M3 11a9 9 0 1 1 2.6 6.4M3 4v7h7'/></symbol>
+    <symbol id='i-up' viewBox='0 0 24 24'><path d='m6 15 6-6 6 6'/></symbol>
+    <symbol id='i-down' viewBox='0 0 24 24'><path d='m6 9 6 6 6-6'/></symbol>
+    <symbol id='i-play' viewBox='0 0 24 24'><path d='m8 5 11 7-11 7V5Z'/></symbol>
+    <symbol id='i-drag' viewBox='0 0 24 24'><path d='M12 3v18m-4-14 4-4 4 4m-8 10 4 4 4-4'/></symbol>
+  </svg>
+
+  <div class='app'>
+    <header class='header'>
+      <div class='brand'>
+        <span class='brand-mark' aria-hidden='true'><svg class='icon'><use href='#i-music'/></svg></span>
+        <div><p class='brand-title'>오선의 정원</p><p class='brand-sub'>MUSIC RUDIMENTS · INTERACTIVE 3D</p></div>
+      </div>
+      <div class='header-actions'>
+        <button class='icon-button' id='sound-toggle' type='button' aria-pressed='true' aria-label='소리 끄기' title='소리 켜기·끄기'><svg class='icon'><use id='sound-icon' href='#i-volume'/></svg></button>
+        <button class='icon-button' id='camera-reset' type='button' aria-label='3D 시점 초기화' title='시점 초기화'><svg class='icon'><use href='#i-reset'/></svg></button>
+      </div>
+    </header>
+
+    <main class='main'>
+      <section class='stage' id='stage' tabindex='0' role='slider' aria-label='음표 자리. 위쪽과 아래쪽 화살표 키로 움직일 수 있습니다' aria-valuemin='0' aria-valuemax='20' aria-valuenow='9' aria-valuetext='둘째 간, 라, A4'>
+        <div class='canvas-mount' id='canvas-mount' aria-hidden='true'></div>
+        <div class='scene-top'><span class='lesson-tag'>001 · 오선, 덧줄, 덧간</span><span class='view-tag'>드래그하여 둘러보기</span></div>
+        <div class='label-layer' id='label-layer' aria-hidden='true'></div>
+        <span class='zone-label top' aria-hidden='true'>위쪽 덧줄 · 덧간</span>
+        <span class='zone-label bottom' aria-hidden='true'>아래쪽 덧줄 · 덧간</span>
+        <div class='scene-bottom'><p class='drag-hint'><svg class='icon' aria-hidden='true'><use href='#i-drag'/></svg>음표를 위아래로 움직여 보세요</p><span class='color-key' aria-hidden='true'><i class='key-dot'></i><i class='key-dot out'></i></span></div>
+        <div class='toast' id='toast' role='status' aria-live='polite'></div>
+        <div class='poster' id='poster' aria-hidden='true'><div class='poster-art'><div class='poster-lines'><i></i><i></i><i></i><i></i><i></i><span class='poster-note'></span></div></div></div>
+        <div class='fallback' id='fallback' hidden>이 브라우저에서는 3D를 표시할 수 없어요. 아래 버튼으로도 같은 내용을 연습할 수 있습니다.</div>
+      </section>
+
+      <aside class='sidebar' aria-label='음악이론 학습 패널'>
+        <section class='lesson-intro'>
+          <p class='lesson-kicker'>소리로 배우는 첫걸음</p>
+          <h1>음표의 자리를<br>소리로 익혀 보세요</h1>
+          <p class='intro-copy'>높은음자리표의 다섯 줄에서 음표를 움직이면 자리 이름과 실제 높이가 함께 바뀝니다.</p>
+        </section>
+
+        <section class='current' aria-label='현재 음표'>
+          <div><p class='current-label'>지금 음표는</p><p class='note-name' id='note-name'>둘째 간</p><div class='chips' id='chips'><span class='chip'>오선 안</span><span class='chip'>간</span></div></div>
+          <div class='solfa-badge' id='solfa-badge' aria-hidden='true'><span class='solfa' id='solfa'>라</span><span class='letter' id='letter'>A4</span></div>
+        </section>
+
+        <p class='explanation' id='explanation'>오선 안 둘째 간은 라(A4)예요. 음표 머리가 줄과 줄 사이에 놓여 있어요.</p>
+        <div class='controls' aria-label='음표 조작'>
+          <button class='control' id='note-up' type='button'><svg class='icon' aria-hidden='true'><use href='#i-up'/></svg><span>한 자리 위</span></button>
+          <button class='control' id='note-down' type='button'><svg class='icon' aria-hidden='true'><use href='#i-down'/></svg><span>한 자리 아래</span></button>
+          <button class='control primary' id='listen' type='button'><svg class='icon' aria-hidden='true'><use href='#i-play'/></svg><span>소리 듣기</span></button>
+        </div>
+
+        <section class='practice' aria-label='자리 찾기 연습'>
+          <div class='practice-head'><h2 class='practice-title'>세 번의 자리 찾기</h2><span class='practice-count' id='practice-count'>0 / 3</span></div>
+          <p class='practice-copy' id='practice-copy'>오선과 덧줄, 덧간을 얼마나 잘 알고 있을까요? 연습을 시작해 보세요.</p>
+          <button class='practice-button' id='practice-button' type='button'>연습 시작</button>
+          <div class='progress' id='practice-progress' aria-hidden='true'><i></i><i></i><i></i></div>
+        </section>
+
+        <div class='legend'><span><i></i>오선 안의 음</span><span><i class='out'></i>덧줄·덧간의 음</span></div>
+      </aside>
+    </main>
+  </div>
+  <p class='sr' id='live' aria-live='polite'></p>
+  <script type='module' src='./src/scene.js'></script>
+</body>
+</html>

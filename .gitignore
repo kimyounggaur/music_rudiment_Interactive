@@ -2,3 +2,8 @@ preview*.html
 inline-check.js
 fonts/
 __pycache__/
+
+# Three.js 3D app
+web3d/node_modules/
+web3d/dist/
+web3d/verification-shots/
